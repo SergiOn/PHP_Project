@@ -15,6 +15,9 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <form action="login.php" method="post">
+            <button type="submit" name="quit" value="exit">Quit</button>
+            </form>
         </div><!--/.nav-collapse -->
     </div>
 </div>

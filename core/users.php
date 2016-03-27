@@ -1,8 +1,9 @@
 <?php
+session_start();
 
 require_once("functions/db.php");
 
-function auth($login, $pass) {
+function auth($login, $pass, $check = false) {
 	$user = select("user_login", false,
 		[
 			"email" => $login, 
@@ -10,14 +11,19 @@ function auth($login, $pass) {
 		]
 	)[0];
 
-	if ($user) {
+	if ($user && $check) {
 		setcookie("id", $user['id'], time() + 60*60*24);
+		return true;
+	} elseif ($user) {
+		$_SESSION['id'] = $user['id'];
+		if ($_COOKIE['id'] && $_SESSION['id'] !== $_COOKIE['id']) {
+			setcookie("id", "", time());
+		}
 		return true;
 	} else {
 		return false;
 	}
 }
-// echo auth("onishhenko@gmail.com", "12345");
 
 
 function checkExist($email) {
@@ -32,22 +38,21 @@ function checkExist($email) {
 
 
 // реєструємо
-function registrationUser($email, $pass, $avatar, $name, $l_name, $phone, $birthdate, $city) {
+function regUser($email, $pass, $avatar, $name, $l_name, $phone, $birthdate, $city) {
 
 	$id = insert("user_login", ["email" => $email, "pass" => md5($pass)]);
 
 	if ($avatar) {
 		$nameAvatar = $avatar['name'];
-		$nameIdAvatar = preg_replace("/([a-z0-9]+)\.([a-z0-9]+)/i", "$id.$2", $nameAvatar);
+		$nameIdAvatar = preg_replace("/[a-z0-9]+\.([a-z0-9]+)/i", "$id.$1", $nameAvatar);
 		$tmp_name = $avatar['tmp_name'];
-		copy($tmp_name, "images/".$nameIdAvatar);
+		copy($tmp_name, "images/idUsers/".$nameIdAvatar);
+		$avatarLink = "images/idUsers/".$nameIdAvatar;
 	} else {
-		$nameIdAvatar = "";
+		$avatarLink = "";
 	}
 
-	insert("user_data", ["id" => $id, "name" => $name, "l_name" => $l_name, "phone" => $phone, "birthdate" => $birthdate, "idCity" => $city, "regDate" => date("Y-m-j H:i:s", strtotime("-1 hours")), "avatar" => "$nameIdAvatar"]);
-
-	// auth($email, $pass);
+	insert("user_data", ["id" => $id, "name" => $name, "l_name" => $l_name, "phone" => $phone, "birthdate" => $birthdate, "idCity" => $city, "regDate" => date("Y-m-j H:i:s", strtotime("-1 hours")), "avatar" => "$avatarLink"]);
 
 	return $id;
 }

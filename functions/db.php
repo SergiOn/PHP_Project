@@ -55,8 +55,9 @@ function select($table, $column = [], $where = []) {
 	return $array;
 }
 // $arr = select("user_login", false, ["email" => "onishhenko@gmail.com", "pass" => "12345"]);
+// $arr = select("articles");
 // echo "<pre>";
-// print_r($arr);
+// print_r($arr === null);
 // echo "</pre>";
 
 
@@ -87,7 +88,7 @@ function insert($table, $what) {
 // insert("user_login", ["email"=>"2insert@gmail", "pass"=>"2passinsert"]);
 
 
-function update ($table, $set, $where) {
+function update($table, $set, $where) {
 	global $db;
 
 	$setSQL = "";
@@ -104,13 +105,13 @@ function update ($table, $set, $where) {
 		$and = "AND";
 	}
 
-	$sql = "UPDATE `user_login` SET $setSQL WHERE $whereSQL";
+	$sql = "UPDATE `$table` SET $setSQL WHERE $whereSQL";
 
 	$query = mysqli_query($db, $sql);
 
 	return $query;
 }
-// update ("user_login", ["email"=>"new@gmail", "pass"=>"updatenew"], ["id"=>"6", "email"=>"2new@gmail"]);
+// update("user_login", ["email"=>"new@gmail", "pass"=>"updatenew"], ["id"=>"6", "email"=>"2new@gmail"]);
 
 
 function delete($table, $where) {

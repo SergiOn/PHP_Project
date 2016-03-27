@@ -41,7 +41,7 @@
 	  </div>
 	  <div class="checkbox">
 		<label>
-		  <input type="checkbox"> Check me out
+		  <input type="checkbox" name="check"> Check me out
 		</label>
 	  </div>
 	  <button type="submit" class="btn btn-default">Submit</button>

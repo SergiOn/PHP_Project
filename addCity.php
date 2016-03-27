@@ -1,5 +1,12 @@
 <?php
 
+require_once("functions/functions.php");
+if (chekAuth()) {
+	$idUser = chekAuth();
+} else {
+	header("refresh: 1, url = login.php");
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	require_once("functions/views.php");

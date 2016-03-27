@@ -1,5 +1,10 @@
 <?php
 
+require_once("functions/functions.php");
+if (checkAuth()) {
+	header("refresh: 1, url = news.php");
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
 	require_once("functions/views.php");
@@ -24,27 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 
 	// реєструємо
-	$id = registrationUser($_POST['email'], $_POST['pass'], $_FILES['avatar'], $_POST['name'], $_POST['l_name'], $_POST['phone'], $_POST['birthdate'], $_POST['city']);
+	$id = regUser($_POST['email'], $_POST['pass'], $_FILES['avatar'], $_POST['name'], $_POST['l_name'], $_POST['phone'], $_POST['birthdate'], $_POST['city']);
 
 	if ($id) {
-		$status = auth($_POST['email'], $_POST['pass']);
-
+		$status = auth($_POST['email'], $_POST['pass'], $_POST['check']);
 		if ($status) {
-			header("Refresh:3;url=news.php");
+			header("Refresh:2; url=news.php");
+			echo "Registration complete. Authentication good";
 		}
-
 	} else {
-		header("Refresh:3;url=registration.php");
+		header("Refresh:2; url=registration.php");
+		echo "Registration complete. Authentication bad";
 	}
 
 
 } 
-
-
-
-
-
-
-
 
 
