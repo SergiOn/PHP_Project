@@ -7,5 +7,5 @@
 		
 		<textarea name="articletext" type="text" class="form-control" id="articletext" placeholder="Text"></textarea>
 	  </div>
-	  <button type="submit" class="btn btn-default">Submit</button>
+	  <button type="submit" class="btn btn-default" name="submit" value="11">Submit</button>
 </form>

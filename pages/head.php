@@ -44,6 +44,35 @@
             background-color: #080808;
             color: #fff;
         }
+        .navbar-collapse ul li {
+            background-color: transparent;
+            color: #9D9D9D;
+        }
+        .navbar-collapse ul li:hover {
+            background-color: #080808;
+            color: #fff;
+        }
+        .navbar-collapse .user {
+            float: right;
+            margin-right: 100px;
+        }
+
+        .row .col-sm-6.col-md-4 .thumbnail img {
+            width: inherit;
+        }
+        .row .col-sm-6.col-md-4 .thumbnail .img {
+            float: left;
+            width: 80px;
+            height: 60px;
+            margin-right: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .row .col-sm-6.col-md-4 .thumbnail .caption p a {
+            margin-left: 80px;
+        }
+
+
 
     </style>
 </head>

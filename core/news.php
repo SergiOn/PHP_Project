@@ -2,6 +2,9 @@
 
 require_once("functions/db.php");
 
+require_once("functions/functions.php");
+
+
 function addNews($title, $cover, $articletext) {
 	$idUser = checkAuth();
 
@@ -20,27 +23,54 @@ function addNews($title, $cover, $articletext) {
 	return $idArticle;
 }
 
-function getNews() {
-		$articles = select("articles");
+
+function getNews($articleId = false) {
+	if (!$articleId) {
+		$articles = sendQuery("SELECT a.*, u.name, u.l_name, u.avatar FROM `articles` AS a LEFT JOIN `user_data` AS u ON a.`idUser` = u.`id` ORDER BY `id`");
 		return $articles;
+	} else {
+		$article = select("articles", false, ["id" => $articleId])[0];
+		return $article;
+	}
 }
 
 
-function articleAuthor($article) {
-	if ($article["image"]) {
-		$author[0] = '<img src="'.$article["image"].'" alt="img'.$article["id"].'">';
+function articleDelete($articleId) {
+	if ($articleId) {
+		$imageLink = select("articles", ["image"], ["id" => $articleId])[0]["image"];
+
+		$result = delete("articles", ["id" => $articleId]);
+		if ($result) {
+			if ($imageLink) {
+				unlink($imageLink);
+			}
+			header("refresh: 1, url = news.php");
+		} else {
+			echo "Article not deleted";
+		}
 	}
-
-	$authorSQL = select("user_data", ["name", "l_name"], ["id" => $article['idUser']])[0];
-	$author[1] = $authorSQL["name"]." ".$authorSQL["l_name"];
-
-	if ($article['idUser'] === checkAuth()) {
-		$author[2] = '<br><a href="news.php?articleId='.$article["id"].'">Delete Article</a>';
-	}
-
-	return $author;
 }
 
 
+function getSubscribeNews() {
+	$idUser = checkAuth();
+
+	$result = sendQuery("SELECT * FROM `articles` WHERE `idUser` IN (
+		SELECT `idAutor` FROM `subscribes` WHERE `idUser` = $idUser
+	)");
+
+	return $result;
+}
 
 
+function disableSubscribe($articleId) {
+	if ($articleId) {
+		$result = delete("subscribes", ["idAutor" => $articleId]);
+		if ($result) {
+			header("refresh: 1, url = subscribes.php");
+			echo "Subscribe Disabled";
+		} else {
+			echo "Subscribe not disabled";
+		}
+	}
+}

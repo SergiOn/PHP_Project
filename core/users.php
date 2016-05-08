@@ -3,6 +3,9 @@ session_start();
 
 require_once("functions/db.php");
 
+require_once("functions/functions.php");
+
+
 function auth($login, $pass, $check = false) {
 	$user = select("user_login", false,
 		[
@@ -58,6 +61,28 @@ function regUser($email, $pass, $avatar, $name, $l_name, $phone, $birthdate, $ci
 }
 
 
+function getUsers() {
+	return select("user_data");
+}
 
 
+function addSubscribe($idSubs) {
+	$idUser = checkAuth();
 
+	$result = select("subscribes", false, ["idUser" => $idUser, "idAutor" => $idSubs]);
+
+	if (!$result) {
+		insert("subscribes", ["idUser" => $idUser, "idAutor" => $idSubs]);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
+function checkSubscribe($idSubs) {
+	$idUser = checkAuth();
+	$result = select("subscribes", false, ["idUser" => $idUser, "idAutor" => $idSubs]);
+
+	return $result;
+}

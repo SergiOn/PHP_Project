@@ -1,9 +1,7 @@
 <?php
 
 require_once("functions/functions.php");
-if (chekAuth()) {
-	$idUser = chekAuth();
-} else {
+if (!checkAuth()) {
 	header("refresh: 1, url = login.php");
 }
 
@@ -32,9 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 }
 
 
-
-
-
+echo checkAuth();
 
 
 

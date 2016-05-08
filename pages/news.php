@@ -1,16 +1,31 @@
 <?php
-foreach ($articles as $article) {   
+$idUser = checkAuth();
+foreach ($articles as $article) {
 ?>
 
 <blockquote>
     <h4><?= $article["title"] ?></h4>
 
-    <?= articleAuthor($article)[0] ?>
+    <?php
+    if ($article["image"]) {
+        echo '<img src="'.$article["image"].'" alt="img'.$article["id"].'">';
+    }
+    ?>
+    <p>
+        <?= $article["text"] ?>
+    </p>
+    <footer><?= $article["createDate"] ?>
+        <cite title="Source Title">
+            <?= $article["name"]." ".$article["l_name"] ?>
+        </cite>
+        
+        <?php
+        if ($article['idUser'] === $idUser) {
+            echo '<br><a href="news.php?articleId='.$article["id"].'">Delete Article</a>';
+            echo '<br><a href="addNews.php?articleId='.$article["id"].'">Modify the Text</a>';
+        }
+        ?>
 
-    <p><?= $article["text"] ?></p>
-    <footer><?= $article["createDate"] ?><cite title="Source Title"><?= articleAuthor($article)[1] ?></cite>
-
-        <?= articleAuthor($article)[2] ?>
     </footer>
 </blockquote>
 
